@@ -3,28 +3,29 @@ import ListPage from "./pages/ListPage";
 import CreatePage from "./pages/CreatePage";
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   const [page, setPage] = useState("login");
+  const isLoggedIn = localStorage.getItem("token");
+
+  if (!isLoggedIn && page !== "login") {
+    setPage("login");
+  }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold text-center py-4">
+    <div>
+      <h1 style={{ textAlign: "center" }}>
         Board Management Reporting Hub
       </h1>
 
-      <div className="flex justify-center gap-4 mb-4">
-        <button onClick={() => setPage("login")}>Login</button>
-        <button onClick={() => setPage("dashboard")}>Dashboard</button>
-        <button onClick={() => setPage("list")}>List</button>
-        <button onClick={() => setPage("create")}>Create</button>
-      </div>
+      {isLoggedIn && <Navbar setPage={setPage} />}
 
-      <div className="max-w-3xl mx-auto bg-white p-5 shadow rounded">
+      <div style={{ padding: "20px" }}>
         {page === "login" && <LoginPage setPage={setPage} />}
         {page === "dashboard" && isLoggedIn && <Dashboard />}
-        {page === "list" && <ListPage />}
-        {page === "create" && <CreatePage />}
+        {page === "list" && isLoggedIn && <ListPage />}
+        {page === "create" && isLoggedIn && <CreatePage />}
       </div>
     </div>
   );

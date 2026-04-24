@@ -1,33 +1,34 @@
 import { useState } from "react";
-import axios from "axios";
+import { createReport } from "../services/api";
 
 export default function CreatePage() {
   const [title, setTitle] = useState("");
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:8081/api/reports", {
-        title: title
-      });
+      await createReport({ title });
       alert("Created successfully");
     } catch (err) {
-      console.log(err);
       alert("Backend not ready yet");
     }
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <h2>Create Report</h2>
 
       <input
+        style={{ padding: "8px", marginRight: "10px" }}
         type="text"
         placeholder="Enter title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
 
-      <button onClick={handleSubmit}>
+      <button
+        style={{ padding: "8px", backgroundColor: "#1B4F8A", color: "white" }}
+        onClick={handleSubmit}
+      >
         Submit
       </button>
     </div>
