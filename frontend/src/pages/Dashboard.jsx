@@ -1,8 +1,6 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 
 export default function Dashboard() {
-
-  // dummy data (until backend ready)
   const data = [
     { name: "Total", value: 10 },
     { name: "Completed", value: 6 },
@@ -10,35 +8,36 @@ export default function Dashboard() {
   ];
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Dashboard</h2>
+    <div className="p-6">
+      <h2 className="text-3xl font-bold mb-6 text-center">Dashboard</h2>
 
-      {/* KPI Cards */}
-      <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
-        <div style={{ border: "1px solid gray", padding: "10px" }}>
-          <h4>Total Reports</h4>
-          <p>10</p>
+      {/* Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white p-6 rounded shadow text-center">
+          <h4 className="text-gray-500">Total</h4>
+          <p className="text-2xl font-bold">10</p>
         </div>
 
-        <div style={{ border: "1px solid gray", padding: "10px" }}>
-          <h4>Completed</h4>
-          <p>6</p>
+        <div className="bg-green-100 p-6 rounded shadow text-center">
+          <h4 className="text-gray-500">Completed</h4>
+          <p className="text-2xl font-bold text-green-700">6</p>
         </div>
 
-        <div style={{ border: "1px solid gray", padding: "10px" }}>
-          <h4>Pending</h4>
-          <p>4</p>
+        <div className="bg-red-100 p-6 rounded shadow text-center">
+          <h4 className="text-gray-500">Pending</h4>
+          <p className="text-2xl font-bold text-red-700">4</p>
         </div>
       </div>
 
       {/* Chart */}
-      <BarChart width={400} height={300} data={data}>
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Bar dataKey="value" />
-      </BarChart>
-
+      <div className="bg-white p-6 rounded shadow flex justify-center overflow-x-auto">
+        <BarChart width={400} height={300} data={data}>
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey="value" />
+        </BarChart>
+      </div>
     </div>
   );
 }

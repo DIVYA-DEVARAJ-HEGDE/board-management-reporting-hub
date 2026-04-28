@@ -5,6 +5,9 @@ export default function ListPage() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
+  const [page, setPage] = useState(1);
+
+  const itemsPerPage = 5;
 
   useEffect(() => {
     getReports()
@@ -12,32 +15,31 @@ export default function ListPage() {
       .catch(() => {});
   }, []);
 
-  // frontend filtering (works even without backend)
-  const filteredData = data.filter(item => {
-    return (
-      item.title?.toLowerCase().includes(search.toLowerCase()) &&
-      (status === "" || item.status === status)
-    );
-  });
+  const filteredData = data.filter(item =>
+    item.title?.toLowerCase().includes(search.toLowerCase()) &&
+    (status === "" || item.status === status)
+  );
+
+  const start = (page - 1) * itemsPerPage;
+  const paginatedData = filteredData.slice(start, start + itemsPerPage);
 
   return (
-    <div>
-      <h2>Reports</h2>
+    <div className="p-6 max-w-4xl mx-auto">
+      <h2 className="text-3xl font-bold mb-6 text-center">Reports</h2>
 
-      {/* 🔍 Search + Filter */}
-      <div style={{ marginBottom: "15px" }}>
+      {/* Search + Filter */}
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
         <input
-          type="text"
-          placeholder="Search by title"
+          className="border p-2 rounded w-full"
+          placeholder="Search reports..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ padding: "8px", marginRight: "10px" }}
         />
 
         <select
+          className="border p-2 rounded"
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          style={{ padding: "8px" }}
         >
           <option value="">All</option>
           <option value="Pending">Pending</option>
@@ -45,25 +47,40 @@ export default function ListPage() {
         </select>
       </div>
 
-      {/* 📄 Data */}
-      {filteredData.length === 0 ? (
-        <p>No data available</p>
+      {/* Data */}
+      {paginatedData.length === 0 ? (
+        <p className="text-center text-gray-500">No data available</p>
       ) : (
-        filteredData.map(item => (
+        paginatedData.map(item => (
           <div
             key={item.id}
-            style={{
-              border: "1px solid #ccc",
-              padding: "10px",
-              marginBottom: "10px",
-              borderRadius: "5px"
-            }}
+            className="bg-white shadow p-4 mb-3 rounded hover:shadow-md transition"
           >
-            <b>{item.title}</b> <br />
-            <small>Status: {item.status || "N/A"}</small>
+            <b className="text-lg">{item.title}</b>
           </div>
         ))
       )}
+
+      {/* Pagination */}
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          className="bg-gray-300 px-4 py-2 rounded disabled:opacity-50"
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+        >
+          Prev
+        </button>
+
+        <span className="font-semibold">Page {page}</span>
+
+        <button
+          className="bg-gray-300 px-4 py-2 rounded disabled:opacity-50"
+          onClick={() => setPage(page + 1)}
+          disabled={start + itemsPerPage >= filteredData.length}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

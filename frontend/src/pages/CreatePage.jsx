@@ -8,29 +8,31 @@ export default function CreatePage() {
     try {
       await createReport({ title });
       alert("Created successfully");
-    } catch (err) {
-      alert("Backend not ready yet");
+      setTitle("");
+    } catch {
+      console.log("Waiting for backend...");
     }
   };
 
   return (
-    <div>
-      <h2>Create Report</h2>
+    <div className="flex justify-center items-center mt-10">
+      <div className="bg-white shadow p-6 rounded w-96">
+        <h2 className="text-2xl font-bold mb-4 text-center">Create Report</h2>
 
-      <input
-        style={{ padding: "8px", marginRight: "10px" }}
-        type="text"
-        placeholder="Enter title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+        <input
+          className="border p-2 w-full mb-4 rounded"
+          placeholder="Enter title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-      <button
-        style={{ padding: "8px", backgroundColor: "#1B4F8A", color: "white" }}
-        onClick={handleSubmit}
-      >
-        Submit
-      </button>
+        <button
+          className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
+          onClick={handleSubmit}
+        >
+          Submit
+        </button>
+      </div>
     </div>
   );
 }

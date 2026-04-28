@@ -1,32 +1,27 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+import Navbar from "./components/Navbar";
+import Dashboard from "./pages/Dashboard";
 import ListPage from "./pages/ListPage";
 import CreatePage from "./pages/CreatePage";
 import LoginPage from "./pages/LoginPage";
-import Dashboard from "./pages/Dashboard";
-import Navbar from "./components/Navbar";
 
 export default function App() {
+  const { token } = useContext(AuthContext);
   const [page, setPage] = useState("login");
-  const isLoggedIn = localStorage.getItem("token");
 
-  if (!isLoggedIn && page !== "login") {
+  if (!token && page !== "login") {
     setPage("login");
   }
 
   return (
-    <div>
-      <h1 style={{ textAlign: "center" }}>
-        Board Management Reporting Hub
-      </h1>
+    <div className="bg-gray-100 min-h-screen">
+      {token && <Navbar setPage={setPage} />}
 
-      {isLoggedIn && <Navbar setPage={setPage} />}
-
-      <div style={{ padding: "20px" }}>
-        {page === "login" && <LoginPage setPage={setPage} />}
-        {page === "dashboard" && isLoggedIn && <Dashboard />}
-        {page === "list" && isLoggedIn && <ListPage />}
-        {page === "create" && isLoggedIn && <CreatePage />}
-      </div>
+      {page === "login" && <LoginPage setPage={setPage} />}
+      {page === "dashboard" && token && <Dashboard />}
+      {page === "list" && token && <ListPage />}
+      {page === "create" && token && <CreatePage />}
     </div>
   );
 }

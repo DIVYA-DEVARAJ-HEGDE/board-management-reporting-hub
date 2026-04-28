@@ -22,4 +22,10 @@ export const searchReports = (query) =>
 
 export const filterReports = (status) =>
   API.get(`/reports/filter?status=${status}`);
+
+export const updateReport = (id, data) =>
+  API.put(`/reports/${id}`, data);
+
+export const deleteReport = (id) =>
+  API.delete(`/reports/${id}`);
 export default API;
